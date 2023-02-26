@@ -627,9 +627,7 @@ func TestGPool(t *testing.T) {
 
 ### 13. 画出go标准库net/http下Client的Do方法流程图
 
-
-
-![Client.Do方法流程图](D:\MyLearn\编程学习资料\go语言学习\作业\Client.Do方法流程图.png)
+![Client的Do方法流程图](C:\Users\lhling\Desktop\goTest\Client的Do方法流程图.png)
 
 ### 14. 阐述你对context.Context的理解
 
