@@ -63,7 +63,9 @@ z := <-a //从channel中读取数据
 
 运行时报错：fatal error: all goroutines are asleep - deadlock!
 
-因为通过make(chan int)开辟的通道 a 是无缓冲通道，一次写入或读取就会阻塞，直到相反的操作发生，此处因为处于一个goroutine中，a<-1写入操作阻塞，程序无法到达下一行的读取操作，也无法获得其他的读取操作，所以整个程序阻塞，造成死锁。
+因为通过make(chan int)开辟的通道 a 是无缓冲通道，一次写入或读取就会阻塞，直到相反的操作发生，
+此处因为处于一个goroutine中，a<-1写入操作阻塞，程序无法到达下一行的读取操作，
+也无法获得其他的读取操作，所以整个程序阻塞，造成死锁。
 
 可以另开一个goroutine,当前的goroutine同步读取来解决
 ```
@@ -112,7 +114,9 @@ func multipleDeathLock() {
 运行时报错：fatal error: all goroutines are asleep - deadlock!
 
 chanInt是无缓冲信道，需要同时有读写两端才不会发生阻塞
-第一行的chanInt <- 1运行完成时，可能还没有等到子协程读取，第二行的chanInt <- 1执行就会造成阻塞。同时，第二行的chanInt <- 1写入时没有相应的读端，也会产生阻塞
+第一行的chanInt <- 1运行完成时，可能还没有等到子协程读取，
+第二行的chanInt <- 1执行就会造成阻塞。
+同时，第二行的chanInt <- 1写入时没有相应的读端，也会产生阻塞
 
 ```
 
@@ -162,7 +166,8 @@ func multipleDeathLock2() {
 // 产生的问题：
 运行时报错：fatal error: all goroutines are asleep - deadlock!
 
-主协程的for{}在依次读取子协程传入的两个数据后，会继续读取，此时chanInt内没有数据，相当于只有读端没有写端，会等待产生阻塞，因此需要保证读写次数一致
+主协程的for{}在依次读取子协程传入的两个数据后，会继续读取，
+此时chanInt内没有数据，相当于只有读端没有写端，会等待产生阻塞，因此需要保证读写次数一致
 ```
 
 正确写法：
@@ -242,7 +247,9 @@ func goroutineLeak() {
 
 ```Plain Text
 // 产生的问题：
-在输出两个1之后输出很多0，这是因为goroutineLeak()执行完之后，defer执行，关闭了chanInt()，在关闭之后等待了1s，但是匿名函数中goroutine并没有关闭，而是一直在循环取值，在读取完写入里面的两个1后，会读取到通道的类型零值，在程序停止前，一直输出0。
+在输出两个1之后输出很多0，这是因为goroutineLeak()执行完之后，defer执行，关闭了chanInt()，
+在关闭之后等待了1s，但是匿名函数中goroutine并没有关闭，而是一直在循环取值，
+在读取完写入里面的两个1后，会读取到通道的类型零值，在程序停止前，一直输出0。
 问题：goroutine会永远运行下去，如果以后再次使用又会出现新的泄漏！导致内存、cpu占用越来越多
 解决方法：通过读取时返回的ok判断通道是否已关闭，如果已关闭，退出for{}，停止读取
 
@@ -291,7 +298,8 @@ func goroutineLeakNoClosed() {
 
 ```Plain Text
 // 产生的问题：
-运行描述：chanInt()在子协程读取，但没有写端，虽然在主协程结束后，子协程也会结束，可能来不及报deadlock就结束了，因此没有报错。
+运行描述：chanInt()在子协程读取，但没有写端，虽然在主协程结束后，子协程也会结束，
+可能来不及报deadlock就结束了，因此没有报错。
 在goroutineLeakNoClosed()结束前,通道chanInt没有关闭,释放资源
 
 问题：
@@ -619,9 +627,9 @@ func TestGPool(t *testing.T) {
 
 ### 13. 画出go标准库net/http下Client的Do方法流程图
 
+
+
 ![Client.Do方法流程图](D:\MyLearn\编程学习资料\go语言学习\作业\Client.Do方法流程图.png)
-
-
 
 ### 14. 阐述你对context.Context的理解
 
